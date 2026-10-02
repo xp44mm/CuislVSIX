@@ -1,0 +1,11 @@
+﻿# Visual Studio 用户设置
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# 构建产物
+bin/
+obj/
+build.log
