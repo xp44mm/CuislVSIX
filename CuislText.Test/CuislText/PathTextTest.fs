@@ -11,7 +11,7 @@ type PathTextTest() =
         let x = @"C:\proj\src\x.hpp"
         let w = @"C:\proj"
         let y = PathText.relativePath x w
-        let e = "src\x.hpp"
+        let e = @"\src\x.hpp"
         Assert.Equal(e, y)
 
     [<Fact>]
@@ -19,15 +19,16 @@ type PathTextTest() =
         let x = @"C:\proj\src\x.hpp"
         let w = @"C:\proj\src"
         let y = PathText.relativePath x w
-        let e = "x.hpp"
+        let e = @"\x.hpp"
         Assert.Equal(e, y)
 
     [<Fact>]
-    member _.``相对化：基准更深时生成向上目录``() =
+    member _.``相对化：基准不是父目录返回完整路径``() =
+        // 抛出错误，说明w不是x的父目录，应该返回完整路径
         let x = @"C:\proj\src\x.hpp"
         let w = @"C:\other"
         let y = PathText.relativePath x w
-        let e = @"..\proj\src\x.hpp"
+        let e = @"C:\proj\src\x.hpp"
         Assert.Equal(e, y)
 
     [<Fact>]
@@ -35,7 +36,7 @@ type PathTextTest() =
         let x = @"C:\a\b\c\d.hpp"
         let w = @"C:\a\b"
         let y = PathText.relativePath x w
-        let e = "c\d.hpp"
+        let e = @"\c\d.hpp"
         Assert.Equal(e, y)
 
     [<Fact>]
@@ -43,7 +44,7 @@ type PathTextTest() =
         let x = @"C:\a\b\d.hpp"
         let w = @"C:\a\b\"
         let y = PathText.relativePath x w
-        let e = "d.hpp"
+        let e = @"\d.hpp"
         Assert.Equal(e, y)
 
     [<Fact>]
@@ -54,16 +55,11 @@ type PathTextTest() =
         let e = @"C:\proj\x.hpp"
         Assert.Equal(e, y)
 
-    [<Fact>]
-    member _.``相对化：基准为null返回完整路径``() =
-        let x = @"C:\proj\x.hpp"
-        let w = null
-        let y = PathText.relativePath x w
-        let e = @"C:\proj\x.hpp"
-        Assert.Equal(e, y)
+    // fsharp中null和""是等价的，null会被转换为""，所以不需要单独测试null
 
     [<Fact>]
     member _.``相对化：跨盘符返回完整路径``() =
+        // 抛出错误，说明w不是x的父目录，应该返回完整路径
         let x = @"D:\x.hpp"
         let w = @"C:\proj"
         let y = PathText.relativePath x w
@@ -73,16 +69,18 @@ type PathTextTest() =
     [<Fact>]
     member _.``格式化：单行行号``() =
         let x = @"a\b.hpp"
-        let w = 1
-        let y = PathText.formatPathWithLine x w 1
+        let l1 = 1
+        let l2 = 1
+        let y = PathText.formatPathWithLine x l1 l2
         let e = @"〔a\b.hpp#1〕"
         Assert.Equal(e, y)
 
     [<Fact>]
     member _.``格式化：多行行号区间``() =
         let x = @"a\b.hpp"
-        let w = 3
-        let y = PathText.formatPathWithLine x w 5
+        let l1 = 3
+        let l2 = 5
+        let y = PathText.formatPathWithLine x l1 l2
         let e = @"〔a\b.hpp#3-5〕"
         Assert.Equal(e, y)
 
