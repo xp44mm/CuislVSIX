@@ -8,7 +8,10 @@ type PathTextTest() =
 
     [<Fact>]
     member _.``相对化：文件在基准目录下一层``() =
-        Assert.Equal("src\x.hpp", PathText.relativePath @"C:\proj\src\x.hpp" @"C:\proj")
+        let x = @"C:\proj\src\x.hpp"
+        let y = @"C:\proj"
+        let e = "src\x.hpp"
+        Assert.Equal(e, PathText.relativePath x y)
 
     [<Fact>]
     member _.``相对化：文件与基准同目录``() =
