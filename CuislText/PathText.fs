@@ -6,7 +6,8 @@ open System
 module PathText =
 
     /// 计算 fullPath 相对 baseDir 的路径（Windows 反斜杠分隔），相对路径以分隔符开头（如 \src\x.hpp）。
-    /// baseDir 为空、跨盘符、或 baseDir 不是 fullPath 的父目录（需“..”向上）时，返回完整路径。
+    /// baseDir 为空（null 或 ""）时返回完整路径；
+    /// baseDir 不是 fullPath 的父目录（跨盘符或需“..”向上）时，抛出 ArgumentException 说明 baseDir（w）输入错误。
     let relativePath (fullPath: string) (baseDir: string) : string =
         if String.IsNullOrEmpty baseDir then
             fullPath
@@ -22,9 +23,9 @@ module PathText =
                     String.Equals(fileParts.[i], baseParts.[i], StringComparison.OrdinalIgnoreCase))
                 |> Seq.length
 
-            // baseDir 必须是 fullPath 的父目录（公共前缀覆盖 baseDir 全部段），否则返回完整路径
+            // baseDir 必须是 fullPath 的父目录（公共前缀覆盖 baseDir 全部段），否则 w 输入错误
             if common = 0 || common < baseParts.Length then
-                fullPath
+                raise (ArgumentException(sprintf "w 输入错误：基准目录 %s 不是文档 %s 的父目录" baseDir fullPath, "baseDir"))
             else
                 "\\" + (fileParts.[common..] |> String.concat "\\")
 
@@ -36,10 +37,13 @@ module PathText =
         sprintf "〔%s%s〕" path lineInfo
 
     /// 按命令类型构造完整复制文本：
-    /// useRelative=true 时使用 relativePath（成功时以分隔符开头，失败时回退完整路径）；
+    /// useRelative=true 时使用 relativePath（成功时以分隔符开头；w 输入错误时捕获异常回退完整路径）；
     /// useRelative=false 时使用完整路径。
     let copyText (fullPath: string) (baseDir: string) (useRelative: bool) (topLine: int) (bottomLine: int) : string =
         let path =
-            if useRelative then relativePath fullPath baseDir
-            else fullPath
+            if useRelative then
+                try relativePath fullPath baseDir
+                with :? ArgumentException -> fullPath
+            else
+                fullPath
         formatPathWithLine path topLine bottomLine

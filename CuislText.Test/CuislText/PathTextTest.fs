@@ -1,5 +1,6 @@
 ﻿namespace CuislText.Test
 
+open System
 open CuislText
 open Xunit
 
@@ -23,13 +24,11 @@ type PathTextTest() =
         Assert.Equal(e, y)
 
     [<Fact>]
-    member _.``相对化：基准不是父目录返回完整路径``() =
-        // 抛出错误，说明w不是x的父目录，应该返回完整路径
+    member _.``相对化：w不是父目录应抛出错误``() =
+        // w 输入错误：w 不是 x 的父目录（需“..”向上），应抛出 ArgumentException
         let x = @"C:\proj\src\x.hpp"
         let w = @"C:\other"
-        let y = PathText.relativePath x w
-        let e = @"C:\proj\src\x.hpp"
-        Assert.Equal(e, y)
+        Assert.Throws<ArgumentException>(fun () -> PathText.relativePath x w |> ignore)
 
     [<Fact>]
     member _.``相对化：深层目录``() =
@@ -58,13 +57,11 @@ type PathTextTest() =
     // fsharp中null和""是等价的，null会被转换为""，所以不需要单独测试null
 
     [<Fact>]
-    member _.``相对化：跨盘符返回完整路径``() =
-        // 抛出错误，说明w不是x的父目录，应该返回完整路径
+    member _.``相对化：跨盘符w不是父目录应抛出错误``() =
+        // w 输入错误：跨盘符时 w 不可能是 x 的父目录，应抛出 ArgumentException
         let x = @"D:\x.hpp"
         let w = @"C:\proj"
-        let y = PathText.relativePath x w
-        let e = @"D:\x.hpp"
-        Assert.Equal(e, y)
+        Assert.Throws<ArgumentException>(fun () -> PathText.relativePath x w |> ignore)
 
     [<Fact>]
     member _.``格式化：单行行号``() =
