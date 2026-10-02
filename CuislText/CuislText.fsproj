@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Include="VerticalAlignment.fs" />
+    <Compile Include="PathText.fs" />
   </ItemGroup>
 
   <ItemGroup>

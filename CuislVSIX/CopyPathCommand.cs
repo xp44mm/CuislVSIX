@@ -116,27 +116,13 @@ namespace CuislVSIX
                     return;
                 }
 
-                string path;
+                string baseDir = null;
                 if (useRelative)
                 {
-                    var baseDir = await GetRelativeBaseDirAsync();
-                    path = Helper.GetRelativePath(info.FullPath, baseDir);
-                    if (path != info.FullPath)
-                    {
-                        // 相对化成功：以分隔符开头，与盘符开头的绝对路径区分
-                        path = "\\" + path;
-                    }
-                }
-                else
-                {
-                    path = info.FullPath;
+                    baseDir = await GetRelativeBaseDirAsync();
                 }
 
-                var lineInfo = info.TopLine == info.BottomLine
-                    ? String.Format("#{0}", info.TopLine)
-                    : String.Format("#{0}-{1}", info.TopLine, info.BottomLine);
-
-                Helper.CopyToClipboard(String.Format("〔{0}{1}〕", path, lineInfo));
+                Helper.CopyToClipboard(CuislText.PathText.copyText(info.FullPath, baseDir, useRelative, info.TopLine, info.BottomLine));
             });
         }
 

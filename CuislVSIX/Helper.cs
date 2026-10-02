@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -120,45 +118,6 @@ namespace CuislVSIX
                 TopLine = textDocument.Selection.TopPoint.Line,
                 BottomLine = textDocument.Selection.BottomPoint.Line
             };
-        }
-
-        /// <summary>
-        /// 计算 fullPath 相对 baseDir 的路径（Windows 反斜杠分隔）。
-        /// baseDir 为空（如无解决方案打开）或无法建立相对关系（如不同盘符）时返回完整路径。
-        /// </summary>
-        public static string GetRelativePath(string fullPath, string baseDir)
-        {
-            if (String.IsNullOrEmpty(baseDir))
-            {
-                return fullPath;
-            }
-
-            var fileParts = fullPath.Split('\\', '/');
-            var baseParts = baseDir.TrimEnd('\\', '/').Split('\\', '/');
-
-            int common = 0;
-            while (common < fileParts.Length - 1 && common < baseParts.Length &&
-                   String.Equals(fileParts[common], baseParts[common], StringComparison.OrdinalIgnoreCase))
-            {
-                common++;
-            }
-
-            if (common == 0)
-            {
-                // 盘符不同或没有公共前缀，无法相对化
-                return fullPath;
-            }
-
-            var parts = new List<string>();
-            for (int i = common; i < baseParts.Length; i++)
-            {
-                parts.Add("..");
-            }
-            for (int i = common; i < fileParts.Length; i++)
-            {
-                parts.Add(fileParts[i]);
-            }
-            return String.Join("\\", parts);
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ Visual Studio 扩展：垂直对齐代码、复制完整 / 相对路径和行号
 - 按各列最大显示宽度右对齐（ASCII 字符宽度按 1，中文等宽字符宽度按 2）；
 - 行尾多余空白会被删除，行间以系统换行符连接。
 
-核心对齐逻辑由 F# 类库 `CuislText` 实现（`VerticalAlignment.fs`）。
+核心对齐逻辑由 F# 类库 `CuislText` 实现（`VerticalAlignment.fs`）；路径与复制文本的格式化逻辑同样位于 `CuislText`（`PathText.fs`）。
 
 ### 复制路径和行号
 
@@ -53,14 +53,15 @@ CuislVSIX/                            VSIX 扩展主项目（C#，.NET Framework
   CuislVSIXPackage.cs                 包入口（AsyncPackage），初始化 DTE 与各命令
   AlignCommand.cs                     垂直对齐命令
   CopyPathCommand.cs                  复制完整 / 相对路径和行号命令
-  Helper.cs                           活动文档信息、相对路径计算、选区替换、剪贴板
+  Helper.cs                           活动文档信息、选区替换、剪贴板（VS 集成壳）
   SeparatorDialog.xaml(.cs)           分隔符输入对话框（支持正则）
   MetroTheme.xaml                     MahApps.Metro 主题
   CuislVSIXPackage.vsct               命令表（工具菜单布局）
   source.extension.vsixmanifest       扩展清单
   Resources/                          命令图标
-CuislText/                            F# 类库（netstandard2.0）
+CuislText/                            F# 类库（netstandard2.0，纯逻辑层）
   VerticalAlignment.fs                按分隔符对齐的核心逻辑
+  PathText.fs                         相对路径计算与复制文本格式化
 ```
 
 ## 依赖
