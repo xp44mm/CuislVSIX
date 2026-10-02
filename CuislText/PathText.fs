@@ -1,7 +1,7 @@
 ﻿namespace CuislText
 
 open System
-
+open System.IO
 /// 路径与复制文本格式化：计算相对路径、构造“〔路径#行号〕”形式的复制文本。
 module PathText =
 
@@ -12,6 +12,7 @@ module PathText =
         if String.IsNullOrEmpty baseDir then
             fullPath
         else
+            
             let fileParts = fullPath.Split('\\', '/')
             let baseParts = baseDir.TrimEnd('\\', '/').Split('\\', '/')
 
@@ -27,7 +28,13 @@ module PathText =
             if common = 0 || common < baseParts.Length then
                 raise (ArgumentException(sprintf "w 输入错误：基准目录 %s 不是文档 %s 的父目录" baseDir fullPath, "baseDir"))
             else
-                "\\" + (fileParts.[common..] |> String.concat "\\")
+                let fileParts = 
+                    fileParts
+                    |> Array.skip common
+                    |> Array.toList
+
+                "" :: fileParts
+                |> String.concat "\\" 
 
     /// 构造复制文本：〔路径#行号〕，选区跨多行时为〔路径#起-止〕。
     let formatPathWithLine (path: string) (topLine: int) (bottomLine: int) : string =

@@ -5,6 +5,7 @@
     <RootNamespace>CuislText.Test</RootNamespace>
     <TargetFramework>net10.0</TargetFramework>
     <NuGetAudit>false</NuGetAudit>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +14,9 @@
 
   <ItemGroup>
     <Compile Include="CuislText\VerticalAlignmentTest.fs" />
-    <Compile Include="CuislText\PathTextTest.fs" />
+    <Compile Include="CuislText\RelativePathTest.fs" />
+    <Compile Include="CuislText\FormatPathWithLineTest.fs" />
+    <Compile Include="CuislText\CopyTextTest.fs" />
   </ItemGroup>
 
   <ItemGroup>
