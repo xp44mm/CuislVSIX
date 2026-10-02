@@ -45,6 +45,15 @@ msbuild CuislVSIX.sln /t:Build /p:Configuration=Debug
 - `CuislVSIX\bin\CuislVSIX.vsix`（AnyCPU）
 - `CuislVSIX\bin\x64\Debug\CuislVSIX.vsix`（x64）
 
+## 测试
+
+F# 逻辑层测试（xUnit v3 + Microsoft Testing Platform，net10.0，需要 .NET 10 SDK）。测试项目为可执行文件，直接运行即可：
+
+```powershell
+dotnet build CuislText.Test\CuislText.Test.fsproj
+CuislText.Test\bin\Debug\net10.0\CuislText.Test.exe
+```
+
 ## 项目结构
 
 ```
@@ -62,6 +71,9 @@ CuislVSIX/                            VSIX 扩展主项目（C#，.NET Framework
 CuislText/                            F# 类库（netstandard2.0，纯逻辑层）
   VerticalAlignment.fs                按分隔符对齐的核心逻辑
   PathText.fs                         相对路径计算与复制文本格式化
+CuislText.Test/                       F# 测试项目（net10.0，xUnit v3）
+  CuislText\VerticalAlignmentTest.fs  对齐逻辑测试
+  CuislText\PathTextTest.fs           路径与复制文本逻辑测试
 ```
 
 ## 依赖
