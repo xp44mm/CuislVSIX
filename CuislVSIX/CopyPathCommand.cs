@@ -57,13 +57,16 @@ namespace CuislVSIX
         }
 
         /// <summary>
-        /// 无活动文档、未命名（untitled）文档或不是文本文档时隐藏命令。
+        /// 无活动文档且解决方案资源管理器中无有效文件选择时隐藏命令。
         /// </summary>
         private void OnBeforeQueryStatus(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var menuCommand = (OleMenuCommand)sender;
-            menuCommand.Visible = Helper.GetActiveDocumentInfo(CuislVSIXPackage._dte) != null;
+            // 焦点在解决方案资源管理器（含文件系统视图）时始终可见；
+            // 其他场景仅在存在有效目标文档时可见。
+            menuCommand.Visible = Helper.IsSolutionExplorerActive(CuislVSIXPackage._dte) ||
+                                  Helper.GetCopyTargetInfo(CuislVSIXPackage._dte) != null;
         }
 
         /// <summary>
@@ -110,7 +113,7 @@ namespace CuislVSIX
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                var info = Helper.GetActiveDocumentInfo(CuislVSIXPackage._dte);
+                var info = Helper.GetCopyTargetInfo(CuislVSIXPackage._dte);
                 if (info is null)
                 {
                     return;

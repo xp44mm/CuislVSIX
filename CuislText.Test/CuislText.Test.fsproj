@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="10.1.401" />
-    <PackageReference Include="xunit.v3.assert" Version="4.0.1" />
-    <PackageReference Include="xunit.v3.core.mtp-v2" Version="4.0.1" />
+    <PackageReference Update="FSharp.Core" Version="11.0.101" />
+    <PackageReference Include="xunit.v3.assert" Version="4.0.3" />
+    <PackageReference Include="xunit.v3.core.mtp-v2" Version="4.0.3" />
     <PackageReference Include="FSharp.xUnit" Version="1.4.1" />
   </ItemGroup>
 

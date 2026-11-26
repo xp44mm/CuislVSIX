@@ -75,15 +75,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Core">
-      <Version>10.1.401</Version>
+      <Version>11.0.101</Version>
     </PackageReference>
     <PackageReference Include="MahApps.Metro">
       <Version>2.4.11</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="18.12.1606" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="18.5.40034">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="18.12.1606">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -127,8 +127,7 @@
   <!-- 发布语言只保留简中(zh-Hans)与英语(neutral)，打包前从 VSIX 源中剔除其他语言卫星资源 -->
   <Target Name="PruneVsixSatelliteLanguages" AfterTargets="GetVsixSourceItems">
     <ItemGroup>
-      <VSIXSourceItem Remove="@(VSIXSourceItem)"
-                      Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(VSIXSourceItem.TargetPath)', '^(?!zh-Hans\\)[^\\]+\\.+resources\.dll$'))" />
+      <VSIXSourceItem Remove="@(VSIXSourceItem)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(VSIXSourceItem.TargetPath)', '^(?!zh-Hans\\)[^\\]+\\.+resources\.dll$'))" />
     </ItemGroup>
   </Target>
 </Project>
